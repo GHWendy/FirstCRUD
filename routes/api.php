@@ -18,3 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 // routes/api.php
 Route::post('products', "ProductController@store");
+Route::get('products/{id}', "ProductController@show");
+Route::get('products', "ProductController@index");
+Route::put('products/{id}', "ProductController@update");
+
+Route::delete('products/{id}', "ProductController@destroy");

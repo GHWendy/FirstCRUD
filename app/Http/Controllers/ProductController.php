@@ -14,7 +14,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::all();
+         return response()->json($products,200);
+    
     }
 
     /**
@@ -49,9 +51,12 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(Int $id)
     {
-        //
+        $productResolve = Product::find($id);
+        // Return a response with a product json
+        // representation and a 200 status code   
+        return response()->json($productResolve,200);
     }
 
     /**
@@ -72,9 +77,15 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Int $id)
     {
-        //
+        $product = Product::find($id);
+        $product-> name = $request-> name;
+        $product-> price =  $request-> price;
+        $product-> save();
+        // Return a response with a product json
+        // representation and a 200 status code   
+        return response()->json($product,200);
     }
 
     /**
@@ -83,8 +94,11 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
-    {
-        //
+    public function destroy(Int $id)
+    {   
+        $product = Product::find($id);
+        $product -> delete();
+
+        return response()->json(200);
     }
 }
