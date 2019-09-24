@@ -11,14 +11,14 @@ use Illuminate\Foundation\Testing\WithFaker;
 
 class ProductTest extends TestCase
 {
-     //use RefreshDatabase;
+     use RefreshDatabase;
 
      public function test_client_can_create_a_product()
     {
         // Given
         $productData = [
-            'name' => 'Super Product',
-            'price' => '23.30'
+            'name' => 'Porta Taquitos',
+            'price' => '26.50'
         ];
 
         // When
@@ -38,8 +38,8 @@ class ProductTest extends TestCase
         // Assert the product was created
         // with the correct data
         $response->assertJsonFragment([
-            'name' => 'Super Product',
-            'price' => '23.30'
+             'name' => 'Porta Taquitos',
+            'price' => '26.50'
         ]);
         
         $body = $response->decodeResponseJson();
@@ -49,13 +49,20 @@ class ProductTest extends TestCase
             'products',
             [
                 'id' => $body['id'],
-                'name' => 'Super Product',
-                'price' => '23.30'
+                 'name' => 'Porta Taquitos',
+            'price' => '26.50'
             ]
         );
     }
 
      public function test_client_can_show_a_product() {
+
+         $productData = [
+            'name' => 'Porta Taquitos',
+            'price' => '26.50'
+        ];
+
+        $this->json('POST', '/api/products', $productData); 
       // Given
         $id = '2';
         
@@ -76,14 +83,23 @@ class ProductTest extends TestCase
         // Assert the product was RETURNED
         // with the correct data
         $response->assertJsonFragment([
-            'name' => 'Porta Taquitos updated',
-            'price' => '130.60'
+             'name' => 'Porta Taquitos',
+            'price' => '26.50'
         ]);
     }
 
     public function test_client_can_update_a_product() {
+
+         $productData = [
+            'name' => 'Porta Taquitos',
+            'price' => '26.50'
+        ];
+
+        $response = $this->json('POST', '/api/products', $productData);
+        $body = $response->decodeResponseJson();
+
       // Given
-        $id = '2';
+        $id = $body['id'];
         $productData = [
             'name' => 'Porta Taquitos updated',
             'price' => '130.60'
@@ -112,9 +128,16 @@ class ProductTest extends TestCase
     }
 
     public function test_client_can_delete_a_product() {
+       $productData = [
+            'name' => 'Porta Taquitos',
+            'price' => '26.50'
+        ];
+
+        $response = $this->json('POST', '/api/products', $productData);
+        $body = $response->decodeResponseJson();
+
       // Given
-        $id = '2';
-        
+        $id = $body['id'];
         
         // When
         $response = $this->json('DELETE', '/api/products/'.$id); 
