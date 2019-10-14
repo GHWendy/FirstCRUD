@@ -24,8 +24,10 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProduct $request)
     {
+        //Validate
+        $validated = $request -> validated();
     // Create a new product
      $product = Product::create($request->all());
      // Return a response with a product json representation and a 201 status code   

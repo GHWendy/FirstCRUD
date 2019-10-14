@@ -23,6 +23,6 @@ Route::get('products/{product}', "ProductController@show");
 //List all
 Route::get('products', "ProductController@index");
 //Update
-Route::patch('products/{product}', "ProductController@update");
+Route::put('products/{product}', "ProductController@update");
 //Delete
 Route::delete('products/{product}', "ProductController@destroy");

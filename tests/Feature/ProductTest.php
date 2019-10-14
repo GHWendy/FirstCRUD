@@ -11,8 +11,13 @@ use Illuminate\Foundation\Testing\WithFaker;
 
 class ProductTest extends TestCase
 {
+    //SUCCESS: HTTP Code, Body
+    //FAIL: HTTP Code, Body w/error Code and title
      use RefreshDatabase;
 
+     /**
+     * CREATE-1
+     **/
      public function test_client_can_create_a_product()
     {
         // Given
@@ -94,7 +99,7 @@ class ProductTest extends TestCase
             'price' => 130.60
         ];
         // When
-        $response = $this->json('PATCH', '/api/products/'.$id, $productDataUpdate); 
+        $response = $this->json('PUT', '/api/products/'.$id, $productDataUpdate); 
         // Then
         // Assert it sends the correct HTTP Status 
         $response->assertStatus(200); 
