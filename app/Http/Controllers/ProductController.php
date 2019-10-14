@@ -15,18 +15,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-         return response()->json($products,200);
-    
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+         return response()->json($products,200);    
     }
 
     /**
@@ -37,11 +26,9 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        // Create a new product
+    // Create a new product
      $product = Product::create($request->all());
-
-     // Return a response with a product json
-     // representation and a 201 status code   
+     // Return a response with a product json representation and a 201 status code   
      return response()->json($product,201);
     }
 
@@ -51,23 +38,9 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Int $id)
-    {
-        $productResolve = Product::find($id);
-        // Return a response with a product json
-        // representation and a 200 status code   
-        return response()->json($productResolve,200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
+    public function show(Product $product)
+    {        
+        return $product;
     }
 
     /**
@@ -77,15 +50,11 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Int $id)
+    public function update(Request $request, Product $product)
     {
-        $product = Product::find($id);
-        $product-> name = $request-> name;
-        $product-> price =  $request-> price;
-        $product-> save();
-        // Return a response with a product json
-        // representation and a 200 status code   
-        return response()->json($product,200);
+        $product-> update($request->all());
+        // Return a response with a product json representation    
+        return $product;
     }
 
     /**
@@ -94,11 +63,9 @@ class ProductController extends Controller
      * @param  \App\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Int $id)
-    {   
-        $product = Product::find($id);
-        $product -> delete();
-
-        return response()->json(200);
+    public function destroy(Product $product)
+    {  
+        $product->delete();
+        return response()->json([],200);
     }
 }
