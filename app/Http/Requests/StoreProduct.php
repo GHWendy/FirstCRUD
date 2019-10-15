@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+ use Illuminate\Http\Exceptions\HttpResponseException;
+    use Illuminate\Contracts\Validation\Validator;
 
 class StoreProduct extends FormRequest
 {
@@ -25,28 +27,18 @@ class StoreProduct extends FormRequest
     {
         $rules = [];
         switch ($this-> method()) {
-            case 'GET':
-                $rules = [
-                'id' => 'exists:products,id'
-                ];
-                break;
-            case 'DELETE':
-                $rules = [
-                    'id' => 'exists:products,id'
-                    ];
-                break;
             case 'POST':
             $rules = [
                 'name' => 'bail|required',
                 'price' => 'required|gt:0|numeric',
                 ];
                 break;   
-            case 'PUT':
+            case 'PUT': 
                 $rules = [
                 'price' => 'gt:0|numeric',
                 'id' => 'exists:products,id'
                 ];
-                break;   
+                break;         
             default:
                 break;
         }

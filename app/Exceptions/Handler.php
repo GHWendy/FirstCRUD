@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException;
+
 
 class Handler extends ExceptionHandler
 {
@@ -46,6 +48,36 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+    
         return parent::render($request, $exception);
     }
+
+protected function invalidJson($request, ValidationException $exception)
+{
+    $response = ['errors' => []];
+
+    switch ($exception -> status) {
+    case '422':
+        $response['errors'] = [
+                                'code' => 'ERROR-1',
+                                'title' => 'Unprocessable Entity'
+                                ];
+        break;
+     /*case '404':
+        $response['errors'] = [
+                                'code' => 'ERROR-2',
+                                'title' => 'Not Found'
+                                ];
+        break;   */
+    
+    default:
+        $response = [
+            'code' => 'ERROR-2',
+                                'title' => 'Not Found'
+        ];
+        break;
+}
+    return response()->json($response, $exception->status);
+}
+
 }

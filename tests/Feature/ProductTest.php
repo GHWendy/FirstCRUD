@@ -7,7 +7,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-//use Tests\TestCase;
 
 class ProductTest extends TestCase
 {
@@ -76,8 +75,8 @@ class ProductTest extends TestCase
         
         // Assert the body of the error with the correct data
         $response->assertJsonFragment([
-             //'code' => "ERROR-1",
-            //'title' => "Unprocessable Entity"
+             'code' => "ERROR-1",
+            'title' => "Unprocessable Entity"
         ]);
     }
 
@@ -99,8 +98,8 @@ class ProductTest extends TestCase
         
         // Assert the body of the error with the correct data
         $response->assertJsonFragment([
-             //'code' => "ERROR-1",
-            //'title' => "Unprocessable Entity"
+             'code' => "ERROR-1",
+            'title' => "Unprocessable Entity"
         ]);
     }
 
@@ -122,8 +121,8 @@ class ProductTest extends TestCase
         
         // Assert the body of the error with the correct data
         $response->assertJsonFragment([
-             //'code' => "ERROR-1",
-            //'title' => "Unprocessable Entity"
+             'code' => "ERROR-1",
+            'title' => "Unprocessable Entity"
         ]);
     }
 
@@ -145,8 +144,8 @@ class ProductTest extends TestCase
         
         // Assert the body of the error with the correct data
         $response->assertJsonFragment([
-             //'code' => "ERROR-1",
-            //'title' => "Unprocessable Entity"
+             'code' => "ERROR-1",
+            'title' => "Unprocessable Entity"
         ]);
     }
 
@@ -211,8 +210,8 @@ class ProductTest extends TestCase
         $response->assertStatus(422);         
         // Assert the body of the error with the correct data
         $response->assertJsonFragment([
-             //'code' => "ERROR-1",
-            //'title' => "Unprocessable Entity"
+             'code' => "ERROR-1",
+            'title' => "Unprocessable Entity"
         ]);
     }
 
@@ -238,8 +237,8 @@ class ProductTest extends TestCase
         $response->assertStatus(422);         
         // Assert the body of the error with the correct data
         $response->assertJsonFragment([
-             //'code' => "ERROR-1",
-            //'title' => "Unprocessable Entity"
+             'code' => "ERROR-1",
+            'title' => "Unprocessable Entity"
         ]);
     }
 
