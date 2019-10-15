@@ -260,8 +260,8 @@ class ProductTest extends TestCase
         $response->assertStatus(404);         
         // Assert the body of the error with the correct data
         $response->assertJsonFragment([
-             //'code' => "ERROR-2",
-            //'title' => "Not Found"
+             'code' => "ERROR-2",
+            'title' => "Not Found"
         ]);
     }
 
@@ -308,8 +308,8 @@ class ProductTest extends TestCase
         $response->assertStatus(404);         
         // Assert the body of the error with the correct data
         $response->assertJsonFragment([
-             //'code' => "ERROR-2",
-            //'title' => "Not Found"
+             'code' => "ERROR-2",
+            'title' => "Not Found"
         ]);
     }
 
@@ -345,8 +345,8 @@ class ProductTest extends TestCase
         $response->assertStatus(404);         
         // Assert the body of the error with the correct data
         $response->assertJsonFragment([
-             //'code' => "ERROR-2",
-            //'title' => "Not Found"
+             'code' => "ERROR-2",
+            'title' => "Not Found"
         ]);
     }
 

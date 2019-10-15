@@ -5,7 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
-
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Handler extends ExceptionHandler
 {
@@ -48,8 +48,17 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-    
+        if ($exception instanceof ModelNotFoundException)
+        {
+            $response = ['errors' => []];
+            $response['errors'] = [
+                                'code' => 'ERROR-2',
+                                'title' => 'Not Found'
+                                ];
+             return response()->json($response,404);
+         }
         return parent::render($request, $exception);
+    
     }
 
 protected function invalidJson($request, ValidationException $exception)

@@ -35,8 +35,7 @@ class StoreProduct extends FormRequest
                 break;   
             case 'PUT': 
                 $rules = [
-                'price' => 'gt:0|numeric',
-                'id' => 'exists:products,id'
+                'price' => 'gt:0|numeric'
                 ];
                 break;         
             default:
