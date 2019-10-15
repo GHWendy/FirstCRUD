@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreProduct;
 
 class ProductController extends Controller
 {
@@ -68,6 +69,6 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {  
         $product->delete();
-        return response()->json([],200);
+        return response()->json([],204);
     }
 }

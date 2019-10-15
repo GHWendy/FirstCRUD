@@ -13,7 +13,7 @@ class StoreProduct extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true ;
     }
 
     /**
@@ -23,9 +23,33 @@ class StoreProduct extends FormRequest
      */
     public function rules()
     {
-        return [
-            'name' => 'bail|required',
-            'price' => 'required',
-        ];
+        $rules = [];
+        switch ($this-> method()) {
+            case 'GET':
+                $rules = [
+                'id' => 'exists:products,id'
+                ];
+                break;
+            case 'DELETE':
+                $rules = [
+                    'id' => 'exists:products,id'
+                    ];
+                break;
+            case 'POST':
+            $rules = [
+                'name' => 'bail|required',
+                'price' => 'required|gt:0|numeric',
+                ];
+                break;   
+            case 'PUT':
+                $rules = [
+                'price' => 'gt:0|numeric',
+                'id' => 'exists:products,id'
+                ];
+                break;   
+            default:
+                break;
+        }
+        return $rules;
     }
 }
