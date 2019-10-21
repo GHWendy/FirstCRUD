@@ -17,6 +17,7 @@ class StoreProduct extends FormRequest
     {
         return true ;
     }
+    //TODO: Ask what should i change, this level or the ProductController one.
 
     /**
      * Get the validation rules that apply to the request.

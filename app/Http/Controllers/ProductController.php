@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Product;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreProduct;
+use App\Http\Resources\Product as ProductResource;
+use App\Http\Resources\ProductCollection;
 
 class ProductController extends Controller
 {
@@ -20,7 +22,7 @@ class ProductController extends Controller
     // Create a new product
      $product = Product::create($request->all());
      // Return a response with a product json representation and a 201 status code   
-     return response()->json($product,201);
+     return response()->json(new ProductResource($product) ,201);
     }
 
       /**
@@ -35,19 +37,20 @@ class ProductController extends Controller
         $product->name = $request->name;
         $product->price = $request->price;
         $product -> save();
-                // Return a response with a product json representation    
-         return response()->json( $product ,200);
+                // Return a response with a product json representation            
+         return response()->json( new ProductResource($product),200);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Product  $product
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(int $id)
     {   
-         return response()->json($product,200);
+        $productResource = new ProductResource(Product::find($id));
+        return response()->json($productResource,200);
     }
 
 
@@ -72,7 +75,7 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-         return response()->json($products,200);    
+         return response()->json(new ProductCollection($products),200);    
     }
 
 }

@@ -269,7 +269,7 @@ class ProductTest extends TestCase
      * SHOW-1
      **/
      public function test_client_can_show_a_product() {
-        //Given
+        //Given (update creation)
         $productData = factory(Product::class)->create([
             'name' => 'Porta Taquitos',
             'price' => 26.50
@@ -282,16 +282,27 @@ class ProductTest extends TestCase
         
         // Assert the response has the correct structure
       $response->assertJsonStructure([
-           'id',
-            'name',
-            'price'
+           'data' => [
+                'type',
+                'id',
+                'attributes' => [
+                    'name',
+                    'price'
+                ],
+                'links'
+           ]
         ]);
         // Assert the product was RETURNED
         // with the correct data
         $response->assertJsonFragment([
-            'id' => $productData['id'],
-            'name' => 'Porta Taquitos',
-            'price' => "26.50"
+            'data' = [
+                'type' => 'products',
+                'id' => $productData['id'],
+                'attributes' => ['name' => 'Porta Taquitos',
+                                  'price' => 26.50
+                                ],
+                'links' => [ "self" => "http://firstcrud.test/api/products/".$productData['id']]
+                ]
         ]);
     }
 
@@ -391,7 +402,7 @@ class ProductTest extends TestCase
         $response->assertStatus(200); 
         // Assert the products were RETURNED with the correct data
         $response->assertJsonFragment(
-            []
+            ['data' => [] ]
         );
     //AssertJsonStructure o del count.
         $response->assertJsonCount( 0);
