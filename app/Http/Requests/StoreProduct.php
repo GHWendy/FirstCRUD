@@ -43,4 +43,14 @@ class StoreProduct extends FormRequest
         }
         return $rules;
     }
+    protected function failedValidation(Validator $validator) {
+
+        $errors = [
+                'code' => 'ERROR-1',
+                'title' => 'Unprocessable Entity'
+                ];
+        $response = [ 'errors' => $errors]; 
+        throw new HttpResponseException(response()->json($response, 422)); 
+    
+    }
 }
