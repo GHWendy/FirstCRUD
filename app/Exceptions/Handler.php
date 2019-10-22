@@ -52,7 +52,6 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof ModelNotFoundException)
         {
-
             $response['errors'] = [
                 'code' => 'ERROR-2',
                 'title' => 'Not Found'

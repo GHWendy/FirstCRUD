@@ -20,9 +20,9 @@ class ProductController extends Controller
     public function store(StoreProduct $request)
     {
     // Create a new product
-     $product = Product::create($request->all());
+     $product = Product::create($request->data['attributes']);
      // Return a response with a product json representation and a 201 status code   
-     return response()->json(new ProductResource($product) ,201);
+    return response()->json(new ProductResource($product) ,201);
     }
 
       /**
@@ -34,8 +34,8 @@ class ProductController extends Controller
      */
     public function update(StoreProduct $request, Product $product)
     {
-        $product->name = $request->name;
-        $product->price = $request->price;
+        $product->name = $request->data['attributes']['name'];
+        $product->price = $request->data['attributes']['price'];
         $product -> save();
                 // Return a response with a product json representation            
          return response()->json( new ProductResource($product),200);
@@ -47,10 +47,11 @@ class ProductController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(int $id)
+    public function show(Product $product)
     {   
-        $productResource = new ProductResource(Product::find($id));
-        return response()->json($productResource,200);
+       
+       $productResource = new ProductResource($product);
+       return response()->json($productResource,200);
     }
 
 

@@ -30,20 +30,21 @@ class StoreProduct extends FormRequest
         switch ($this-> method()) {
             case 'POST':
             $rules = [
-                'name' => 'bail|required',
-                'price' => 'required|gt:0|numeric',
+                'data.attributes.name' => 'bail|required',
+                'data.attributes.price' => 'required|gt:0|numeric'
                 ];
                 break;   
             case 'PUT': 
                 $rules = [
-                'price' => 'gt:0|numeric'
-                ];
+                'data.attributes.price' => 'gt:0|numeric'
+               ];
                 break;         
             default:
                 break;
         }
         return $rules;
     }
+
     protected function failedValidation(Validator $validator) {
 
         $errors = [

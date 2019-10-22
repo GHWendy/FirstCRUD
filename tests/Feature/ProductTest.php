@@ -12,6 +12,7 @@ class ProductTest extends TestCase
 {
     //SUCCESS: HTTP Code, Body
     //FAIL: HTTP Code, Body w/error Code and title
+    //onvert a response from JSON into an array by calling decodeResponseJson() 
      use RefreshDatabase;
 
      /**
@@ -20,28 +21,40 @@ class ProductTest extends TestCase
      public function test_client_can_create_a_product()
     {
         // Given
-        $productData = [
+        $attributes = [
             'name' => 'Porta Taquitos',
             'price' => 26.50
         ];
+        $productRequest = [
+            'data' => [
+                'type' => "products",
+                'attributes' => $attributes
+            ]
+        ];
+       
         // When
-        $response = $this->json('POST', '/api/products', $productData); 
+        $response = $this->json('POST', '/api/products', $productRequest); 
 
         // Then
         // Assert it sends the correct HTTP Status
         $response->assertStatus(201);
         
         // Assert the response has the correct structure
-        $response->assertJsonStructure([
-            'id',
-            'name',
-            'price'
+        $response->assertJsonStructure([    
+                'type',
+                'id',
+                'attributes' => [
+                    'name',
+                    'price'
+                ],
+                'links' => ['self']
+            
         ]);
 
         // Assert the product was created
         // with the correct data
         $response->assertJsonFragment([
-             'name' => 'Porta Taquitos',
+            'name' => 'Porta Taquitos',
             'price' => 26.50
         ]);
         
@@ -51,8 +64,8 @@ class ProductTest extends TestCase
             'products',
             [
                 'id' => $body['id'],
-                'name' => 'Porta Taquitos',
-                'price' => 26.50
+                'name' =>  $body['attributes']['name'],
+                'price' => $body['attributes']['price']
             ]
         );
     }
@@ -63,11 +76,17 @@ class ProductTest extends TestCase
      public function test_client_can_not_create_a_product_when_name_is_not_given()
     {
         // Given
-        $productData = [
+        $attributes = [
             'price' => 26.50
         ];
+        $productRequest = [
+            'data' => [
+                'type' => "products",
+                'attributes' => $attributes
+            ]
+        ];
         // When
-        $response = $this->json('POST', '/api/products', $productData); 
+        $response = $this->json('POST', '/api/products', $productRequest); 
 
         // Then
         // Assert it sends the correct HTTP Status
@@ -86,11 +105,17 @@ class ProductTest extends TestCase
      public function test_client_can_not_create_a_product_when_price_is_not_given()
     {
         // Given
-        $productData = [
-            'name' => 'Porta Taquitos'
+        $attributes = [
+            'name' => 'Porta Taquitos',
+        ];
+        $productRequest = [
+            'data' => [
+                'type' => "products",
+                'attributes' => $attributes
+            ]
         ];
         // When
-        $response = $this->json('POST', '/api/products', $productData); 
+        $response = $this->json('POST', '/api/products', $productRequest); 
 
         // Then
         // Assert it sends the correct HTTP Status
@@ -109,11 +134,18 @@ class ProductTest extends TestCase
      public function test_client_can_not_create_a_product_when_price_is_not_numeric()
     {
         // Given
-        $productData = [
-            'price' => "abs"
+        $attributes = [
+            'name' => 'Porta Taquitos',
+            'price' => "bas"
+        ];
+        $productRequest = [
+            'data' => [
+                'type' => "products",
+                'attributes' => $attributes
+            ]
         ];
         // When
-        $response = $this->json('POST', '/api/products', $productData); 
+        $response = $this->json('POST', '/api/products', $productRequest); 
 
         // Then
         // Assert it sends the correct HTTP Status
@@ -132,11 +164,18 @@ class ProductTest extends TestCase
      public function test_client_can_not_create_a_product_when_price_is_less_than_one()
     {
         // Given
-        $productData = [
+        $attributes = [
+            'name' => 'Porta Taquitos',
             'price' => 0
         ];
+        $productRequest = [
+            'data' => [
+                'type' => "products",
+                'attributes' => $attributes
+            ]
+        ];
         // When
-        $response = $this->json('POST', '/api/products', $productData); 
+        $response = $this->json('POST', '/api/products', $productRequest); 
 
         // Then
         // Assert it sends the correct HTTP Status
@@ -153,45 +192,64 @@ class ProductTest extends TestCase
      * UPDATE-1
      **/
     public function test_client_can_update_a_product() {
-         $productData = factory(Product::class)->create([
+        $productData = factory(Product::class)->create([
             'name' => 'Porta Taquitos',
             'price' => 26.50
         ]);
 
       // Given
         $id = $productData['id'];
-        $productDataUpdate = [
+        $attributesUpdate = [
             'name' => 'Porta Taquitos updated',
             'price' => 130.60
         ];
+        $productRequest = [
+            'data' => [
+                'type' => "products",
+                'attributes' => $attributesUpdate
+            ]
+        ];
+
         // When
-        $response = $this->json('PUT', '/api/products/'.$id, $productDataUpdate); 
-        // Then
-        // Assert it sends the correct HTTP Status 
+        $response = $this->json('PUT', '/api/products/'.$id, $productRequest); 
+        //Then
         $response->assertStatus(200);         
-        // Assert the response has the correct structure
-      $response->assertJsonStructure([
-           'id',
-            'name',
-            'price'
+
+         $response->assertJsonStructure([
+                'type',
+                'id',
+                'attributes' => [
+                    'name',
+                    'price'
+                ],
+                'links' => ['self']
         ]);
-        // Assert the product was updated with the correct data and it's on the database
-      $this->assertDatabaseHas(
+        
+        $this->assertDatabaseHas(
             'products',
             [
                 'id' => $productData['id'],
-                'name' => $productDataUpdate['name'],
-                'price' => $productDataUpdate['price']
+                'name' => $attributesUpdate['name'],
+                'price' => $attributesUpdate['price']
             ]
         );
       //AssertBody Response
-        $response->assertJsonFragment($productDataUpdate);
+        $response->assertJsonFragment([
+                'type' => 'products',
+                'id'=> $productData['id'], 
+                'attributes' => [
+                     'name' => $attributesUpdate['name'],
+                    'price' => $attributesUpdate['price']
+                ],
+                'links' => ['self' => 'http://firstcrud.test/api/products/'.$productData['id']]
+        ]);
     }
 
      /**
      * UPDATE-2
      **/
     public function test_client_can_not_update_a_product_when_price_is_not_numeric() {
+
          $productData = factory(Product::class)->create([
             'name' => 'Porta Taquitos',
             'price' => 26.50
@@ -199,16 +257,20 @@ class ProductTest extends TestCase
 
       // Given
         $id = $productData['id'];
-        $productDataUpdate = [
+        $attributesUpdate = [
             'name' => 'Porta Taquitos updated',
             'price' => "abs"
         ];
+        $productRequest = [
+            'data' => [
+                'type' => "products",
+                'attributes' => $attributesUpdate
+            ]
+        ];
         // When
-        $response = $this->json('PUT', '/api/products/'.$id, $productDataUpdate); 
+        $response = $this->json('PUT', '/api/products/'.$id, $productRequest); 
         // Then
-        // Assert it sends the correct HTTP Status 
-        $response->assertStatus(422);         
-        // Assert the body of the error with the correct data
+        $response->assertStatus(422);
         $response->assertJsonFragment([
              'code' => "ERROR-1",
             'title' => "Unprocessable Entity"
@@ -226,16 +288,20 @@ class ProductTest extends TestCase
 
       // Given
         $id = $productData['id'];
-        $productDataUpdate = [
+        $attributesUpdate = [
             'name' => 'Porta Taquitos updated',
             'price' => 0
         ];
+        $productRequest = [
+            'data' => [
+                'type' => "products",
+                'attributes' => $attributesUpdate
+            ]
+        ];
         // When
-        $response = $this->json('PUT', '/api/products/'.$id, $productDataUpdate); 
+        $response = $this->json('PUT', '/api/products/'.$id, $productRequest); 
         // Then
-        // Assert it sends the correct HTTP Status 
         $response->assertStatus(422);         
-        // Assert the body of the error with the correct data
         $response->assertJsonFragment([
              'code' => "ERROR-1",
             'title' => "Unprocessable Entity"
@@ -246,15 +312,20 @@ class ProductTest extends TestCase
      * UPDATE-4
      **/
     public function test_client_can_not_update_a_product_when_product_not_exists() {
-
-      // Given
+        // Given
         $id = 0;
-        $productDataUpdate = [
+        $attributesUpdate = [
             'name' => 'Porta Taquitos updated',
-            'price' => 12.34
+            'price' => 130.60
+        ];
+        $productRequest = [
+            'data' => [
+                'type' => "products",
+                'attributes' => $attributesUpdate
+            ]
         ];
         // When
-        $response = $this->json('PUT', '/api/products/'.$id, $productDataUpdate); 
+        $response = $this->json('PUT', '/api/products/'.$id, $productRequest); 
         // Then
         // Assert it sends the correct HTTP Status 
         $response->assertStatus(404);         
@@ -282,7 +353,6 @@ class ProductTest extends TestCase
         
         // Assert the response has the correct structure
       $response->assertJsonStructure([
-           'data' => [
                 'type',
                 'id',
                 'attributes' => [
@@ -290,19 +360,16 @@ class ProductTest extends TestCase
                     'price'
                 ],
                 'links'
-           ]
         ]);
         // Assert the product was RETURNED
         // with the correct data
         $response->assertJsonFragment([
-            'data' = [
                 'type' => 'products',
                 'id' => $productData['id'],
                 'attributes' => ['name' => 'Porta Taquitos',
-                                  'price' => 26.50
+                                  'price' => "26.50"
                                 ],
                 'links' => [ "self" => "http://firstcrud.test/api/products/".$productData['id']]
-                ]
         ]);
     }
 
@@ -378,18 +445,54 @@ class ProductTest extends TestCase
         // Assert it sends the correct HTTP Status
         $response->assertStatus(200); 
         // Assert the products were RETURNED with the correct data
-        $response->assertJsonFragment(
-            [
-            'name' => 'Porta Taquitos',
-            'price' => "9.50"
-            ],
-            [
-            'name' => 'Porta Taquitos',
-            'price' => "9.50"
+        $data = [
+            'data' => [
+                'type' => 'products',
+                'attributes' => [
+                     'name' => 'Porta Taquitos',
+                     'price' => "9.50"
+                ],
+                'type' => 'products',
+                'attributes' => [
+                    'name' => 'Porta Taquitos',
+                     'price' => "9.50"
+                ]
             ]
-        );
-    //AssertJsonStructure o del count.
-        $response->assertJsonCount( count($products));
+        ];
+
+        // $response->assertJsonFragment([
+        //        ['type' => 'products',
+        //         'attributes' => [
+        //              'name' => 'Porta Taquitos',
+        //              'price' => "9.50"
+        //         ]],
+
+        //        ['type' => 'products', 
+        //         'attributes' => [
+        //             'name' => 'Porta Taquitos',
+        //              'price' => "9.50"
+        //         ]]
+        // ]);
+
+        $response->assertJsonStructure([
+            'data' => [
+                ['type',
+                'id',
+                'attributes' => [
+                    'name',
+                    'price'
+                ],
+                'links' => ['self']],
+
+                ['type',
+                'id',
+                'attributes' => [
+                    'name',
+                    'price'
+                ],
+                'links' => ['self']]
+            ]
+        ]);
     }
      /**
      * LIST-2
@@ -405,7 +508,6 @@ class ProductTest extends TestCase
             ['data' => [] ]
         );
     //AssertJsonStructure o del count.
-        $response->assertJsonCount( 0);
     }
 
 }
