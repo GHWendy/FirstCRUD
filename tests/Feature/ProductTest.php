@@ -78,6 +78,11 @@ class ProductTest extends TestCase
              'code' => "ERROR-1",
             'title' => "Unprocessable Entity"
         ]);
+        // Assert the response has the correct structure
+        $response->assertJsonStructure([
+            'errors' => ['code',
+                        'title']
+        ]);
     }
 
     /**
@@ -100,6 +105,11 @@ class ProductTest extends TestCase
         $response->assertJsonFragment([
              'code' => "ERROR-1",
             'title' => "Unprocessable Entity"
+        ]);
+        // Assert the response has the correct structure
+       $response->assertJsonStructure([
+            'errors' => ['code',
+                        'title']
         ]);
     }
 
@@ -124,6 +134,11 @@ class ProductTest extends TestCase
              'code' => "ERROR-1",
             'title' => "Unprocessable Entity"
         ]);
+        // Assert the response has the correct structure
+      $response->assertJsonStructure([
+            'errors' => ['code',
+                        'title']
+        ]);
     }
 
     /**
@@ -146,6 +161,11 @@ class ProductTest extends TestCase
         $response->assertJsonFragment([
              'code' => "ERROR-1",
             'title' => "Unprocessable Entity"
+        ]);
+        // Assert the response has the correct structure
+        $response->assertJsonStructure([
+            'errors' => ['code',
+                        'title']
         ]);
     }
 
@@ -213,6 +233,11 @@ class ProductTest extends TestCase
              'code' => "ERROR-1",
             'title' => "Unprocessable Entity"
         ]);
+        // Assert the response has the correct structure
+        $response->assertJsonStructure([
+            'errors' => ['code',
+                        'title']
+        ]);
     }
 
     /**
@@ -240,6 +265,11 @@ class ProductTest extends TestCase
              'code' => "ERROR-1",
             'title' => "Unprocessable Entity"
         ]);
+        // Assert the response has the correct structure
+        $response->assertJsonStructure([
+            'errors' => ['code',
+                        'title']
+        ]);
     }
 
     /**
@@ -262,6 +292,11 @@ class ProductTest extends TestCase
         $response->assertJsonFragment([
              'code' => "ERROR-2",
             'title' => "Not Found"
+        ]);
+        // Assert the response has the correct structure
+        $response->assertJsonStructure([
+            'errors' => ['code',
+                        'title']
         ]);
     }
 
@@ -311,6 +346,11 @@ class ProductTest extends TestCase
              'code' => "ERROR-2",
             'title' => "Not Found"
         ]);
+        // Assert the response has the correct structure
+        $response->assertJsonStructure([
+            'errors' => ['code',
+                        'title']
+        ]);
     }
 
     /**
@@ -347,6 +387,11 @@ class ProductTest extends TestCase
         $response->assertJsonFragment([
              'code' => "ERROR-2",
             'title' => "Not Found"
+        ]);
+        // Assert the response has the correct structure
+        $response->assertJsonStructure([
+            'errors' => ['code',
+                        'title']
         ]);
     }
 
